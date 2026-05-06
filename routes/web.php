@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SocialLinkController;
+use App\Http\Controllers\ThemeSettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -29,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('skills', SkillController::class)->except(['show']);
     Route::resource('social-links', SocialLinkController::class)->except(['show']);
     Route::resource('experiences', ExperienceController::class)->except(['show']);
+    Route::get('/theme-settings', [ThemeSettingController::class, 'edit'])->name('theme-settings.edit');
+    Route::put('/theme-settings', [ThemeSettingController::class, 'update'])->name('theme-settings.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

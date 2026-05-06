@@ -47,7 +47,15 @@ return [
         'sqlite_custom' => [
             'driver' => 'sqlite',
             'url' => env('DB_CUSTOM_URL'),
-            'database' => env('DB_CUSTOM_DATABASE', database_path('customized.sqlite')),
+            'database' => (static function (): string {
+                $database = env('DB_CUSTOM_DATABASE', 'database/customized.sqlite');
+
+                if ($database === ':memory:' || Str::contains($database, [':\\', ':/']) || Str::startsWith($database, ['/', '\\'])) {
+                    return $database;
+                }
+
+                return base_path($database);
+            })(),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_CUSTOM_FOREIGN_KEYS', true),
             'busy_timeout' => null,
